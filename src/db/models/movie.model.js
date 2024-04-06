@@ -17,8 +17,11 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
         format: {
-            type: DataTypes.ENUM,
-            values: ["VHS", "DVD", "Blu-ray"],
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                isIn: [["VHS", "DVD", "Blu-ray"]],
+            },
         },
     });
 };
