@@ -1,13 +1,13 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("film", {
+    sequelize.define("movie", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
+        title: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
@@ -18,11 +18,7 @@ module.exports = (sequelize) => {
         },
         format: {
             type: DataTypes.ENUM,
-            values: ['VHS', 'DVD', 'Blu-ray'],
-        },
-        actors: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            values: ["VHS", "DVD", "Blu-ray"],
         },
     });
 };
