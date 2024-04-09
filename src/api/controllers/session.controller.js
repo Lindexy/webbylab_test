@@ -1,6 +1,6 @@
 const User = require("../../db/index").models.user;
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const tokenService = require("../../services/token.service");
 
 class Controller {
     async login(req, res) {
@@ -19,9 +19,7 @@ class Controller {
                 email: user.email,
                 name: user.name,
             };
-            const token = jwt.sign({ payload }, process.env.JWT_ACCESS_SECRET, {
-                expiresIn: "1h",
-            });
+            const token = tokenService.generateToken(payload);
 
             res.json({ token, status: 1 });
         } catch (error) {

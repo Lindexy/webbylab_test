@@ -1,6 +1,6 @@
 const User = require("../../db/index").models.user;
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const tokenService = require("../../services/token.service");
 
 class Controller {
     async registration(req, res) {
@@ -26,13 +26,11 @@ class Controller {
                 password: hashPassword,
             });
 
-            const token = jwt.sign(
-                { email, name },
-                process.env.JWT_ACCESS_SECRET,
-                {
-                    expiresIn: "1h",
-                }
-            );
+            const token = tokenService.generateToken({
+                id: user.id,
+                email: user.email,
+                name: user.name,
+            });
 
             res.json({ token, status: 1 });
         } catch (error) {
