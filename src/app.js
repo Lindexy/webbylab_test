@@ -8,6 +8,8 @@ const userRouter = require("./api/routers/user.router");
 const sessionRouter = require("./api/routers/session.router");
 const movieRouter = require("./api/routers/movie.router");
 
+const errorMiddleware = require("./middleware/error.middleware");
+
 const app = express();
 
 app.use(fileUpload());
@@ -17,14 +19,13 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/sessions", sessionRouter);
 app.use("/api/v1/movies", movieRouter);
 
+app.use(errorMiddleware);
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log("Server started");
-    db.sync({
-        // force: true,
-        //  alter: false
-    })
+    db.sync({})
         .then(() => {
             console.log("db connected");
         })
