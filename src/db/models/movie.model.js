@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                isIn: [["VHS", "DVD", "Blu-ray"]],
+                isIn: [["VHS", "DVD", "Blu-Ray"]],
             },
         },
     });
