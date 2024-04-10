@@ -96,43 +96,56 @@ class MovieService {
     }
 
     async limit(where, limit, offset, sort, order) {
-        let movies;
+        try {
+            let movies;
 
-        if (where.title) {
-            movies = await Movie.findAll({
-                where: { title: { [Op.like]: `%${where.title}%` } },
-                include: [
-                    {
-                        model: Actor,
-                        through: { attributes: [] },
-                    },
-                ],
-                order: [[sort, order]],
-                limit,
-                offset,
-            });
-        } else if (where.actor) {
-            movies = await Movie.findAll({
-                include: [
-                    {
-                        model: Actor,
-                        where: { name: { [Op.like]: `%${where.actor}%` } },
-                        through: { attributes: [] },
-                    },
-                ],
-                order: [[sort, order]],
-                limit,
-                offset,
-            });
+            if (where.title) {
+                movies = await Movie.findAll({
+                    where: { title: { [Op.like]: `%${where.title}%` } },
+                    include: [
+                        {
+                            model: Actor,
+                            through: { attributes: [] },
+                        },
+                    ],
+                    order: [[sort, order]],
+                    limit,
+                    offset,
+                });
+            } else if (where.actor) {
+                movies = await Movie.findAll({
+                    include: [
+                        {
+                            model: Actor,
+                            where: { name: { [Op.like]: `%${where.actor}%` } },
+                            through: { attributes: [] },
+                        },
+                    ],
+                    order: [[sort, order]],
+                    limit,
+                    offset,
+                });
+            } else {
+                movies = await Movie.findAll({
+                    order: [[sort, order]],
+                    limit,
+                    offset,
+                });
+            }
+
+            return {
+                data: movies,
+                meta: {
+                    total: movies.length,
+                },
+                status: 1,
+            };
+        } catch (error) {
+            return {
+                status: 0,
+                error: error,
+            };
         }
-
-        return {
-            data: movies,
-            meta: {
-                total: movies.length,
-            },
-            status: 1,
-        };
     }
 
     async import(text) {
